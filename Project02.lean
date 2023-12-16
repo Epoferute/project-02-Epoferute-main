@@ -10,24 +10,35 @@ section
 -- Define a function f of _your choice_ from A to B.
 def A : Type := ℕ
 def B : Type := ℕ
-def f : A → B := fun x => Nat.succ x
+def f : A → B := fun x => Nat.pow x 2
 
 -- Show that your function f is injective...
 lemma inj : Injective f := by
   unfold Injective
-  intro a b h
-  unfold f at h
-  have h1 : Nat.succ a - Nat.succ b = 0 := tsub_eq_of_eq_add_rev h
-  have h2 : Nat.succ a - Nat.succ b = Nat.rawCast a - Nat.rawCast b := Nat.succ_sub_succ a b
-  rw [h2] at h1
-  have h3 : Nat.rawCast a - Nat.rawCast b + Nat.rawCast b = 0 + Nat.rawCast b := congrFun (congrArg HAdd.hAdd h1) (Nat.rawCast b)
-  
-  
+  unfold f
+  intro (a : ℕ) (b : ℕ) h
+  simp only [Nat.pow_eq] at h
+  have h1 : Nat.sqrt (a^2) = Nat.sqrt (b^2) := by exact congrArg Nat.sqrt h
+  have h2 : Nat.sqrt (a^2) = a := by exact Nat.sqrt_eq' a
+  have h3 : Nat.sqrt (b^2) = b := by exact Nat.sqrt_eq' b
+  rwa [h2, h3] at h1
+
 -- But that your function f is not surjective.
 lemma not_surj : ¬ Surjective f := by
   unfold Surjective
   push_neg
-  sorry
+  use (5 : ℕ)
+  unfold f
+  intro (a : ℕ) h
+  simp only [Nat.pow_eq] at h
+  have h1 : Nat.sqrt (a^2) = Nat.sqrt (5) := by exact congrArg Nat.sqrt h
+  have h2 : Nat.sqrt (a^2) = a := by exact Nat.sqrt_eq' a
+  rw [h2] at h1
+  ring_nf at h1
+  rw [h1] at h
+  ring_nf at h
+  have h3 : 4 ≠ 5 := by exact Nat.ne_of_beq_eq_false rfl
+  exact h3 h
 
 end section
 
@@ -43,18 +54,25 @@ variable (B' : Set B)
 
 -- prove that f(A') ∩ B' = f(f⁻¹(B') ∩ A').
 lemma projection_formula : (f '' A') ∩ B' = f '' (f ⁻¹' B' ∩ A') := by
-  have h1 : f '' A' = B' := by
-    refine Iff.mpr Set.Subset.antisymm_iff ?_
-    constructor
-    intro y h
-    simp only [Set.mem_image] at h
-    rcases h with ⟨x, h⟩
-    
-    
-  have h2 : f ⁻¹' B' = A' := by
-    sorry
-  rw [h1, h2]
-  simp only [Set.inter_self]
-  rw [h1]
+  ext y
+  constructor
+  intro h
+  simp only [Set.mem_inter_iff, Set.mem_image] at h
+  rcases h with ⟨⟨x, ⟨h1, h⟩⟩, h'⟩
+  simp only [Set.mem_image, Set.mem_inter_iff, Set.mem_preimage]
+  use x
+  constructor
+  constructor
+  rwa [h]
+  tauto
+  tauto
+
+  intro h
+  simp only [Set.mem_image, Set.mem_inter_iff, Set.mem_preimage] at h
+  rcases h with ⟨x, ⟨⟨h, h1⟩, h'⟩⟩
+  simp only [Set.mem_inter_iff, Set.mem_image]
+  constructor
+  use x
+  rwa [h'] at h
 
 end section
