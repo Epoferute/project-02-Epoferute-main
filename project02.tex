@@ -1,0 +1,23 @@
+\documentclass{amsart}
+\title{Project 2}
+\author{David James Hanson}
+
+\begin{document}
+\maketitle
+
+\section{An injective but not surjective function}
+
+The function I chose for $f : A \to B$ was $f(x) = x^2$. \\ \\
+
+This function is injective because there are no two $x$ which go to the same value. The function is not surjective, however, because of numbers which are not perfect squares. For my proof, I used the Natural Number 5, which is bigger than $2^2$ and smaller than $3^2$.
+
+\section{A projection formula}
+
+The projection formula is just saying that the image of $f$ intersected with the codomain is equal to the image of the inverse of $f$ intersected with the domain. That is, it's really saying that the image of a function is the codomain. However, this isn't necessarily true. For instance, our function $f : A \to B$ was not a bijection, so $f(A) \cap B$ really only equals a subset of $B$. If we were to write 
+	\[ f(A) \cap B = f(f^{-1}(B) \cap A) \] \\
+Then this would not be true.  This is because the inverse $f^{-1}(B)$ is not well-defined for numbers like $(5 : \mathbb{N})$. Thus, it is important that we consider only the range of $f$ for functions that are not invertible. Therefore, we consider $A' \subset A$ and $B' \subset B$ for
+	\[ f(A') \cap B' = f(f^{-1}(B') \cap A') \] \\
+
+To prove this, we must prove a biconditional. Namely, we must show that $y \in (f(A') \cap B') \iff y \in (f(f^{-1}(B') \cap A'))$. Supposing $y \in (f(A') \cap B')$, we are able to deduce that there is some $x \in A'$ and $y \in B'$ such that $f(x) = y$, which is enough to prove our implication. Supposing $y \in (f(f^{-1}(B') \cap A'))$, we're able to deduce that $f(x) = y$, $f(x) \in B'$, and $x \in A'$, which is also enough to prove our implication. Thus, $y \in (f(A') \cap B') \iff y \in (f(f^{-1}(B') \cap A'))$.
+
+\end{document}
